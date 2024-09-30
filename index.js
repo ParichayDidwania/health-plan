@@ -11,7 +11,7 @@ const start = async () => {
     await connectRedis();
     const app = express();
 
-    app.set('etag', 'weak');
+    app.set('etag', false);
     app.use(express.json());
 
     app.use('/', (req, res, next) => {
