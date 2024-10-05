@@ -14,6 +14,10 @@ const ERROR_TYPES = {
         message: 'Validation failed',
         code: 400
     },
+    ALREADY_EXISTS: {
+        message: 'Record already exists',
+        code: 409
+    }
 }
 
 module.exports = { CustomError, ERROR_TYPES };

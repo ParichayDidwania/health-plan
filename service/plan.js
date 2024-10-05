@@ -17,6 +17,10 @@ class PlanService {
         if(!validatePlanPost(plan)) {
             throw new CustomError(ERROR_TYPES.VALIDATION_FAILUIRE);
         }
+        const res = await db.redis.HGET(PlanService.KEY, plan.objectId);
+        if(res) {
+            throw new CustomError(ERROR_TYPES.ALREADY_EXISTS);
+        }
         await db.redis.HSET(PlanService.KEY, plan.objectId, JSON.stringify(plan));
     }
 
