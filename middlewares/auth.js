@@ -4,14 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const verifyGoogleToken = async (token) => {
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-    try {
-        await client.verifyIdToken({
-          idToken: token,
-          audience: process.env.GOOGLE_CLIENT_ID,
-        });
-    } catch (error) {
-        return next(new CustomError(ERROR_TYPES.UNAUTHORIZED));
-    }
+    await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+    });
 }
 
 const ALLOWED_ISSUERS = {
@@ -33,8 +29,12 @@ const auth = async (req, res, next) => {
     const iss = decoded.iss;
 
     if (ALLOWED_ISSUERS[iss]) {
-        ALLOWED_ISSUERS[iss](token);
-        next();
+        try {   
+            await ALLOWED_ISSUERS[iss](token);
+            return next();
+        } catch (e) {
+            return next(new CustomError(ERROR_TYPES.UNAUTHORIZED));
+        }
     } else {
         return next(new CustomError(ERROR_TYPES.UNAUTHORIZED));
     }
