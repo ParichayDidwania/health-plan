@@ -6,6 +6,9 @@ class CustomError extends Error {
 }
 
 const ERROR_TYPES = {
+    PRECONDITION_FAILED: {
+        code: 412
+    },
     UNAUTHORIZED: {
         code: 401
     },
@@ -20,6 +23,10 @@ const ERROR_TYPES = {
     ALREADY_EXISTS: {
         message: 'Record already exists',
         code: 409
+    },
+    PATCH_OBJECT_ID: {
+        message: 'Cannot patch objectId',
+        code: 400
     }
 }
 

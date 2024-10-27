@@ -22,7 +22,10 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     try {
-        await PlanService.createPlan(req.body);
+        const stringifiedRecord = await PlanService.createPlan(req.body);
+        const generatedEtag = etag(stringifiedRecord, { weak: true });
+
+        res.setHeader('ETag', generatedEtag);
     } catch (e) {
         return next(e);
     }
@@ -31,6 +34,22 @@ router.post('/', async (req, res, next) => {
         message: "Plan created successfully",
         status_code: 201
     });
+})
+
+router.patch('/:id', async (req, res, next) => {
+    try {
+        const plan = await PlanService.getPlan(req.params.id);
+        const oldGeneratedEtag = etag(JSON.stringify(plan), { weak: true });
+
+        const record = await PlanService.updatePlan(req.params.id, plan, req.body, req.headers['if-match'], oldGeneratedEtag);
+        const newGeneratedEtag = etag(JSON.stringify(record), { weak: true });
+
+        res.setHeader('ETag', newGeneratedEtag);
+
+        return res.status(200).send(record);
+    } catch (e) {
+        return next(e);
+    }
 })
 
 router.delete('/:id', async (req, res, next) => {
