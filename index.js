@@ -38,6 +38,10 @@ const start = async () => {
 
     app.use((err, req, res, next) => {
         if (err instanceof CustomError) {
+            if (!err.message) {
+                return res.status(err.status_code).send();
+            }
+            
             return res.status(err.status_code).send({
                 message: err.message,
                 status_code: err.status_code

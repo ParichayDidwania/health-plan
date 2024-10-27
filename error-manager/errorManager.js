@@ -6,6 +6,9 @@ class CustomError extends Error {
 }
 
 const ERROR_TYPES = {
+    UNAUTHORIZED: {
+        code: 401
+    },
     NOT_FOUND: {
         message: 'Record not found',
         code: 404
