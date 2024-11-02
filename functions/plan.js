@@ -4,7 +4,14 @@ class PlanFunctions {
     static patchObject(target, patch) {
         for (const key in patch) {
             if (Array.isArray(patch[key])) {
-                target[key] = Array.isArray(target[key]) ? [...target[key], ...patch[key]] : patch[key];  
+                if(Array.isArray(target[key])) {
+                    const existingObjectIds = target[key].map(obj => obj.objectId);
+                    for (const obj of patch[key]) {
+                        if(obj.objectId && !existingObjectIds.includes(obj.objectId)) {
+                            target[key].push(obj);
+                        }
+                    }
+                }
             } else if (typeof patch[key] === 'object') {
                 target[key] = PlanFunctions.patchObject(target[key], patch[key]);
             } else {
