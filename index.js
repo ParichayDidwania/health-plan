@@ -3,12 +3,14 @@ dotenv.config()
 
 const express = require('express')
 const connectRedis = require('./database/redis')
+const { setupRabbitMQ } = require('./publisher/publisher')
 const { CustomError } = require('./error-manager/errorManager')
 
 const routesV1 = require('./routesV1')
 
 const start = async () => {
     await connectRedis();
+    await setupRabbitMQ();
     const app = express();
 
     app.set('etag', false);

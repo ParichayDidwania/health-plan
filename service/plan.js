@@ -2,6 +2,7 @@ const db = require("../database/db");
 const { CustomError, ERROR_TYPES } = require("../error-manager/errorManager");
 const PlanFunctions = require("../functions/plan");
 const validatePlanPost = require("../models/plan");
+const { publisher } = require("../publisher/publisher");
 
 class PlanService {
     static KEY = "plan";
@@ -26,6 +27,8 @@ class PlanService {
 
         const record = await db.redis.HGET(PlanService.KEY, plan.objectId);
 
+        publisher.publish('create', JSON.parse(record));
+
         return record;
     }
 
@@ -43,14 +46,19 @@ class PlanService {
         await db.redis.HSET(PlanService.KEY, id, JSON.stringify(newPlan));
 
         const record = await db.redis.HGET(PlanService.KEY, id);
+
+        publisher.publish('update', JSON.parse(record));
+
         return JSON.parse(record);
     }
 
     static async deletePlan(id) {
-        const res = await db.redis.HDEL(PlanService.KEY, id);
-        if(res == 0) {
+        const record = await db.redis.HGET(PlanService.KEY, id);
+        if(!record) {
             throw new CustomError(ERROR_TYPES.NOT_FOUND);
         }
+        publisher.publish('delete', JSON.parse(record));
+        await db.redis.HDEL(PlanService.KEY, id);
     }
 }
 
