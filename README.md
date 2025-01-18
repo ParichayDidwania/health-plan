@@ -1,4 +1,4 @@
-# Big Data Indexing and Processing
+# Health Plan Indexer
 
 This project showcases advanced techniques for handling and indexing large-scale data efficiently. It leverages **Redis** for fast access, **RabbitMQ** for message-driven processing, and **Elasticsearch** for hierarchical indexing using dynamic parent-child relationships. While the current implementation uses health plans as a use case, the design is adaptable for various big data domains.
 
