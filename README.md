@@ -1,15 +1,14 @@
-# Health Plan CRUD Service with Schema Validation
+# Big Data Indexing and Processing
 
-This project implements a server that provides endpoints for performing CRUD operations on health plans with schema validation. The data is stored in **Redis** for fast access and is also sent as a message to **RabbitMQ**. A consumer service listens to the RabbitMQ queue, processes the messages, and performs the required operation on the provided data in **Elasticsearch**. Before performing the operation, the data is recursively segregated and structured into parent-child relations dynamically, ensuring consistency and integrity in the Elasticsearch index.
+This project showcases advanced techniques for handling and indexing large-scale data efficiently. It leverages **Redis** for fast access, **RabbitMQ** for message-driven processing, and **Elasticsearch** for hierarchical indexing using dynamic parent-child relationships. While the current implementation uses health plans as a use case, the design is adaptable for various big data domains.
 
-## Features
+## Key Features
 
-- **CRUD Operations**: The API supports creating, reading, updating, and deleting health plans.
-- **Schema Validation**: Validates the health plan data before storing it in Redis and Elasticsearch.
-- **Data Segregation**: Recursively segregates the JSON data and dynamically establishes parent-child relationships.
-- **Redis Integration**: Stores the health plan data in Redis for quick access and caching.
-- **RabbitMQ Integration**: Publishes messages to RabbitMQ for further processing.
-- **Elasticsearch Integration**: Consumes messages from RabbitMQ and performs CRUD operations on Elasticsearch, maintaining parent-child relationships using the `join` field.
+- **Big Data Indexing**: Handles large-scale JSON data with recursive segregation into parent-child relationships in Elasticsearch.
+- **Schema Validation**: Ensures data integrity and consistency before storage and processing.
+- **Event-Driven Architecture**: Uses RabbitMQ for asynchronous, message-driven data processing.
+- **Redis Integration**: Offers fast data access and caching for improved performance.
+- **Elasticsearch Integration**: Supports scalable and hierarchical data indexing using the `join` field.
 
 ## Getting Started
 
